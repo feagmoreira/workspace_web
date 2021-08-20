@@ -1,44 +1,51 @@
 function gerarRelatorio(){
+
     var dtIni = document.getElementById("txtDataIni").value;
     var dtFim = document.getElementById("txtDataFim").value;
 
     var url = "http://localhost:8080/eventos?ini="+dtIni+"&fim="+dtFim;
 
+    //fetch faz a comunicacao da pagina com o backend
     fetch(url).then(res => res.json()).then(listaEventos => preencheTabela(listaEventos));
-
-    /* se eu fosse ler como instrução estruturada
+    
+    /* se eu fosse ler como uma instrucao estruturada
 
     res = fetch(url);
     listaEventos = res.json();
-    preencheTabela(listaEventos)
-
+    preencheTabela(listaEventos);
     */
 }
 
+
 function preencheTabela(listaEventos){
-    var strTabela = `<table class="table">
+    var strTabela= `<table class="table">
                         <thead>
-                            <th class="text-center"> numSeq </th>
-                            <th class="text-center"> data </th>
-                            <th class="text-center"> Alarme </th>
-                            <th class="text-center"> Hostname </th>
-                            <th class="text-center"> IP </th>
-                            </thead>
-                            
-                            <tbody>`;
-    // agora eu preciso percorrer a lista e preencher cada uma das linhas
+                            <th> numSeq </th>
+                            <th> data </th>
+                            <th> Alarme </th>
+                            <th> Hostname </th>
+                            <th> IP </th>
+                        </thead>
+                        
+                        <tbody>`;
+
+    // agora eu preciso percorrer uma lista e preencher cada uma das linhas
     for (i=0; i<listaEventos.length; i++){
         let evento = listaEventos[i];
+        
         strTabela = strTabela + `<tr>
-                                    <td class="text-center"> ${evento.numSeq} </td>
-                                    <td class="text-center"> ${evento.dataEvento}</td>
-                                    <td class="text-center"> ${evento.alarme.nome}</td>
-                                    <td class="text-center"> ${evento.equipamento.hostname}</td>
-                                    <td class="text-center"> ${evento.equipamento.ipaddr}</td>
-                                  </tr>`;
+                                    <td> ${evento.numSeq} </td>
+                                    <td> ${evento.dataEvento} </td>
+                                    <td> ${evento.alarme.nome} </td>
+                                    <td> ${evento.equipamento.hostname} </td>
+                                    <td> ${evento.equipamento.ipaddr} </td>
+                                </tr>`;
+
     }
 
-    strTabela = strTabela + `   </tbody>
+    strTabela = strTabela + `</tbody>
                             </table>`;
+
     document.getElementById("relatorio").innerHTML = strTabela;
+
 }
